@@ -1,4 +1,4 @@
-public class Square {
+public class PythagoreanTest {
  public static void main(String[] args) {
 	 Pythagorean x = new Pythagorean();
 	
