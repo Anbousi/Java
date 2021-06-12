@@ -4,8 +4,8 @@ public class Human{
     public int stealth = 3;
     public int intelligence = 3;
 
-    public int attack(){
-        this.health -= this.strength;
-        return this.health;
+    public int attack(Human attacked){
+        attacked.health -= this.strength;
+        return attacked.health;
     }
 }
