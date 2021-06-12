@@ -14,19 +14,16 @@ public class PuzzleJava{
         return sum;
     }
 
-    public int[] getGreater10(int[] arr){
+    public ArrayList<Integer> getGreater10(int[] arr){
         ArrayList<Integer> myArray = new ArrayList<Integer>();
 
         for (int i =0; i<arr.length;i++){
             if(arr[i]>10){
                 myArray.add(arr[i]);
             }
+            
         }
-        int[] arr1 = new int[myArray.size()];
-        for (int k =0; k<myArray.size();k++){
-            arr1[k] = myArray.get(k);
-        }
-        return arr1;
+        return myArray;
     }
 
     public String[] shuffleArray(String[] array){
@@ -42,19 +39,14 @@ public class PuzzleJava{
 		return array;
     }
 
-    public String[] getLongNames(String[] array){
+    public ArrayList<String> getLongNames(String[] array){
         ArrayList<String> myArray = new ArrayList<String>();
 		for (int i = 0; i < array.length; i++) {
             if(array[i].length()>5){
                 myArray.add(array[i]);
             }
 		}
-
-        String[] arr = new String[myArray.size()];
-        for (int k =0; k<myArray.size();k++){
-            arr[k] = myArray.get(k);
-        }
-        return arr;
+        return myArray;
     }
 
     public String getLastChar(List<String> letters){

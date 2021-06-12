@@ -14,8 +14,9 @@ public class PuzzleJavaTest{
         // Print the sum of all numbers in the array.
         int Y = Arr.getSum(X);
         System.out.println("Sum of array elements = " + Y);
-        int[] K = Arr.getGreater10(X);
-        System.out.println("Elements greater than 10 = " + Arrays.toString(K)+"\n");
+        ArrayList<Integer> K = new ArrayList<Integer>();
+        K = Arr.getGreater10(X);
+        System.out.println("Elements greater than 10 = " + K+"\n");
 
         String[] names = {"Nancy", "Jinichi", "Fujibayashi", "Momochi", "Ishikawa"};
         System.out.println("Original names = " +Arrays.toString(names)+"\n");
@@ -24,8 +25,9 @@ public class PuzzleJavaTest{
         String[] newNames = Arr.shuffleArray(names);
         System.out.println("Shuffled names = " +Arrays.toString(newNames)+"\n");
         // names longer than 5 Chars
-        String[] longNames = Arr.getLongNames(names);
-        System.out.println("Names longer than 5 chars = " +Arrays.toString(longNames)+"\n");
+        ArrayList<String> longNames = new ArrayList<String>();
+        longNames = Arr.getLongNames(names);
+        System.out.println("Names longer than 5 chars = " +longNames+"\n");
 
         String[] letter = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
         List<String> letters = Arrays.asList(letter);
