@@ -1,6 +1,6 @@
-public class humanTest{
+public class HumanTest{
     public static void main(String[] args){
-        human person = new human();
+        Human person = new Human();
 
         int health = person.attack();
         System.out.println(health);
