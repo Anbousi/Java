@@ -19,7 +19,7 @@ public class HellohumanApplication {
 	
 @RequestMapping("")
 //3. Method that maps to the request route above
-public String Hello(@RequestParam(value="name", required = false) String name , @RequestParam(value="lastname", required = false) String lname) { // 3
+public String Hello(@RequestParam(value="name", required = false) String name , @RequestParam(value="last_name", required = false) String lname) { // 3
 	if (name == null) {
 		return "Hello Human";
 	}
