@@ -81,11 +81,13 @@ ArrayList <String> activities = new ArrayList<String>();
 			session.setAttribute("total", +(gold + (int) session.getAttribute("total")));
 			session.setAttribute("gold", gold);
 			if(gold >= 0) {
+						
 				String s = "You entere  a casino and earned " + Integer.toString(gold) +" at " + date2;
 				activities.add(s);
-				
 			}
 			else{
+				gold *= -1;
+				session.setAttribute("gold", gold);
 				String s = "You entere  a casino and lost " + Integer.toString(gold)  +" at " + date2;
 				activities.add(s);
 			}

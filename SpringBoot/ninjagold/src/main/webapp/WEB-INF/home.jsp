@@ -74,7 +74,7 @@
         		  
         
         <c:choose>
-		    <c:when test="${item.contains('-')}">
+		    <c:when test="${item.contains('lost')}">
 		        <p style="color: red;"><c:out value="${item}"/></p>
 		    </c:when>
 		    <c:otherwise>
