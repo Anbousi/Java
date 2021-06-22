@@ -52,7 +52,6 @@ public class LangController {
 	@RequestMapping(value="/languages/{id}" , method=RequestMethod.GET)
     public String show(@PathVariable("id") Long id , Model model) {
 		Language language = langService.findLanguageById(id);
-        System.out.println(language.getName());
         model.addAttribute("language", language);
         return "/languages/info.jsp";
     }

@@ -32,7 +32,8 @@
                 <td>
                     <a href='languages/<c:out value="${language.id}"/>/edit'>Edit</a>
                     
-                    <form:form action="/languages/${language.id}" method="DELETE" class="f">
+                    <form:form action="/languages/${language.id}" method="post" class="f">
+                    	<input type="hidden" name="_method" value="DELETE">
                         <button type="submit"><a>Delete</a></button>
                     </form:form>
                 </td>
