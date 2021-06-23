@@ -1,0 +1,15 @@
+*{
+	margin:0;
+	padding:0;
+}
+
+main{
+	width:70%;
+	margin:0 auto;
+	margin-top:15px;
+}
+
+header a{
+	/* display: inline-block; */
+	float: right;
+}
