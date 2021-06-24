@@ -1,6 +1,8 @@
 package com.anbousi.driver.services;
 
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -36,12 +38,46 @@ public class DriverLicenseServices {
 
  // creates a license
 	public License createLicense(License license) {
+		try {
+		List<License> licenses = licenseRepositories.findByOrderByIdDesc();
+		License l1 = licenses.get(0);
+		String count2 = l1.getNumber();
+		int count1  = Integer.parseInt(count2);
+    	count1++;
+//    	System.out.println(count1);
+    	License.setCount(count1);
+		
+    	License.setCount(count1);
+		DecimalFormat nf = new DecimalFormat("00000000");
+//		System.out.println(License.getCount()+ "Database");
+		license.setNumber(nf.format(License.getCount()));
 		return this.licenseRepositories.save(license);
+		}
+		catch(Exception e){
+			license.setNumber("00000001");
+			return this.licenseRepositories.save(license);
+		}
+		
 	}
 	
  // find all persons with license
 	public List<Person> allPersonsWithNoLicenses() {
 		return driverRepositories.findByLicenseIsNull();
 	}
+	
+// find person by id
+public Person findPerson(Long id) {
+    Optional<Person> optionalPerson = driverRepositories.findById(id);
+    if(optionalPerson.isPresent()) {
+        return optionalPerson.get();
+    } else {
+        return null;
+    }
+}
+
+public List<Person> findAllPersons() {
+	List<Person> persons = driverRepositories.findAll();
+	return persons;
+}
 	
 }

@@ -10,6 +10,7 @@
 <title>New License</title>
 </head>
 <body>
+    <a href="/">Home</a>
     <h1>New License</h1>
     <form:form action="/add_license" method="post" modelAttribute="license">
             <table>

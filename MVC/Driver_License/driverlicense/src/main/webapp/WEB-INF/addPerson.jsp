@@ -11,6 +11,7 @@
 </head>
 <body>
     <main>
+        <a href="/">Home</a>
         <h1>New Person</h1>
 
         <form:form action="/add_person" method="post" modelAttribute="person">

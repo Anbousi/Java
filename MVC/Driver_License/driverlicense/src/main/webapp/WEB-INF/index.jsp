@@ -2,6 +2,10 @@
     pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +13,7 @@
 	<title>People and Licenses</title>
 </head>
 <body>
+	<a href="/">Home</a>
 	<h1>Information</h1>
 	<table>
 		<thead>
@@ -19,13 +24,16 @@
 			<th>Expiration Date</th>
 		</thead>
 		<tbody>
-			<c:forEach var="person" items="${people}">
+			<c:forEach var="person" items="${persons}">
 			<tr>
-				<td>${person.firstName}</td>
+				
+				<td><a href="/persons/${person.id}">${person.firstName}</a></td>
 				<td>${person.lastName}</td>
 				<td>${person.license.number}</td>
 				<td>${person.license.state}</td>
-				<td>${person.license.expirationDate}</td>				
+
+				<%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
+				<td><fmt:formatDate value="${person.license.expirationDate}" pattern="yyyy-MM-dd" /> </td>				
 			</tr>
 			</c:forEach>
 		</tbody>

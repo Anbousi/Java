@@ -1,5 +1,6 @@
 package com.anbousi.driver.models;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -23,7 +24,18 @@ import com.sun.istack.NotNull;
 @Table(name="licenses")
 public class License {
     
-    @Id
+    public static Integer count = 0;
+
+	public static Integer getCount() {
+		return count;
+	}
+
+
+
+	public static void setCount(Integer count) {
+		License.count = count;
+	}
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
@@ -53,16 +65,17 @@ public class License {
     private Person person;
     
     public License() {  
+    	
     }
     
         
     
-    public License(String number, Date expirationDate,String state, Person person) {
-
-		this.number = number;
+    public License( Date expirationDate,String state, Person person) {
+    	
 		this.expirationDate = expirationDate;
 		this.state = state;
 		this.person = person;
+		
 	}
 
 
