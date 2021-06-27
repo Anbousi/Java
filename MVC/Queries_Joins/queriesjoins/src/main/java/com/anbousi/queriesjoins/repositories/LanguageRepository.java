@@ -11,7 +11,7 @@ import com.anbousi.queriesjoins.models.Language;
 @Repository
 public interface LanguageRepository extends CrudRepository<Language, Long> {
 	
-	@Query(value="SELECT SELECT countries.name, languages.language, languages.percentage\r\n"
+	@Query(value="SELECT countries.name, languages.language, languages.percentage\r\n"
 			+ "From countries\r\n"
 			+ "JOIN languages\r\n"
 			+ "ON countries.id = languages.country_id\r\n"

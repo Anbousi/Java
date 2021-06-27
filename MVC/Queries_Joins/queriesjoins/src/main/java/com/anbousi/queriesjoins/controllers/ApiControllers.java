@@ -16,6 +16,11 @@ public class ApiControllers {
 
 
 		private ApiServices apiService;
+		
+		public ApiControllers(ApiServices apiService) {
+			this.apiService = apiService;
+		}
+
 		@GetMapping("/")
 		public List<Countery> index() {
 			return apiService.getCountries();

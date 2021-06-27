@@ -19,6 +19,13 @@ public class ApiServices {
 
 	
 
+		public ApiServices(CountryRepository countryRepository, CityRepository cityRepository,
+				LanguageRepository languageRepository) {
+			this.countryRepository = countryRepository;
+			this.cityRepository = cityRepository;
+			this.languageRepository = languageRepository;
+		}
+
 		public List<Object[]> getCountrySpeakSolvane() {
 			return languageRepository.findAllSpeakSlovene();
 		}
@@ -57,7 +64,7 @@ public class ApiServices {
 
 		public List<Countery> getCountries() {
 			
-			return this.countryRepository.findAll();
+			return countryRepository.findAll();
 		}
 
 		
