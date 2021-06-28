@@ -2,7 +2,6 @@ package com.anbousi.loginandregistration.controllers;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.websocket.Session;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,16 +13,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.anbousi.loginandregistration.models.User;
 import com.anbousi.loginandregistration.services.UserService;
+import com.anbousi.loginandregistration.validator.UserValidator;
 
 @Controller
 public class Users {
  private final UserService userService;
+ private final UserValidator userValidator;
  
- public Users(UserService userService) {
-     this.userService = userService;
- }
+
  
- @RequestMapping("/registration")
+ public Users(UserService userService, UserValidator userValidator) {
+	this.userService = userService;
+	this.userValidator = userValidator;
+}
+
+@RequestMapping("/registration")
  public String registerForm(@ModelAttribute("user") User user, HttpSession session) {
 	 if(session.getAttribute("id") == null ) {
 		 return "registrationPage.jsp";
@@ -41,17 +45,35 @@ public class Users {
  }
  
  @RequestMapping(value="/registration", method=RequestMethod.POST)
- public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session) {
+ public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session,Model model) {
      // if result has errors, return the registration page (don't worry about validations just now)
      // else, save the user in the database, save the user id in session, and redirect them to the /home route
-	 if (result.hasErrors()) {
-         return "registrationPage.jsp";
-     } else {
-    	 userService.registerUser(user);
-    	 session.setAttribute("id", user.getId());
-         return "redirect:/home";
-     }
+	 
+//	 if(user.getPassword().equals(user.getPasswordConfirmation())) {
+//		 if (result.hasErrors()) {
+//	         return "registrationPage.jsp";
+//	     }
+//	 userService.registerUser(user);
+//	 session.setAttribute("id", user.getId());
+//	 return "redirect:/home";
+//	 }
+//	 return "registrationPage.jsp";
+	 try {
+		 userValidator.validate(user, result);
+	     if(result.hasErrors()) {
+	         return "registrationPage.jsp";
+	     }
+	     User u = userService.registerUser(user);
+	     session.setAttribute("userId", u.getId());
+	     return "redirect:/home";		 
+	 }
+	 catch(Exception e) {
+		 model.addAttribute("Error", "This email is aleady used");
+	 }
+	 return "registrationPage.jsp";
  }
+	 
+	 
  
  @RequestMapping(value="/login", method=RequestMethod.POST)
  public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session) {

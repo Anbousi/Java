@@ -12,7 +12,7 @@
     <h1>Register!</h1>
     
     <p><form:errors path="user.*"/></p>
-    
+    <c:out value="${Error}"/>
     <form:form method="POST" action="/registration" modelAttribute="user">
         <p>
             <form:label path="email">Email:</form:label>
