@@ -1,0 +1,72 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
+<%@ page isErrorPage="true" %> 
+
+
+---------------------------------------------------------------
+
+<link rel="stylesheet" type="text/css" href="css/index.css">
+
+----------------------------------------------------------------
+JSP
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true" %>
+
+-----------------------------------------------------------------
+
+<c:out value="${book.title}"/>
+
+-----------------------------------------------------------------
+for loop
+
+<c:forEach items="${languages}" var="language">
+</c:forEach>
+
+
+
+example:
+
+                <c:forEach var="person" items="${persons}">
+                <tr>
+                    
+                    <td><a href="/persons/${person.id}">${person.firstName}</a></td>
+                    <td>${person.lastName}</td>
+                    <td>${person.license.number}</td>
+                    <td>${person.license.state}</td>
+    
+                    <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
+                    <td><fmt:formatDate value="${person.license.expirationDate}" pattern="yyyy-MM-dd" /> </td>				
+                </tr>
+                </c:forEach>
+
+
+-----------------------------------------------------------------
+form 
+
+<form:form action="/languages/${language.id}" method="post" class="f">
+
+        <input type="hidden" name="_method" value="DELETE">
+
+        <button type="submit"><a>Delete</a></button>
+</form:form>
+
+------------------------------------------------------------------
+
+<form:form action="/languages" method="post" modelAttribute="language">
+        <table>
+            <tr>
+                <td><form:label path="name">Name</form:label></td>
+                <td>
+                    <form:errors path="name"/>
+                    <form:input path="name"/>
+                </td>
+	</table>
+        
+        <button type="submit">Add a New Language</button>
+ </form:form>

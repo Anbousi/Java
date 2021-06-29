@@ -1,0 +1,107 @@
+// ...
+import org.springframework.stereotype.Service;
+import com.codingdojo.mvc.models.Book;
+@Service
+public class BookService {
+    // adding the book repository as a dependency
+    private final BookRepository bookRepository;
+    
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+    // returns all the books
+    public List<Book> allBooks() {
+        return bookRepository.findAll();
+    }
+    // creates a book
+    public Book createBook(Book b) {
+        return bookRepository.save(b);
+    }
+    // retrieves a book
+    public Book findBook(Long id) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if(optionalBook.isPresent()) {
+            return optionalBook.get();
+        } else {
+            return null;
+        }
+    }
+}
+
+
+
+------------------------------------------------------------------------------
+
+
+@Service
+public class LangServices {
+
+	private final LangRepositories langRepo;
+
+	public LangServices(LangRepositories langRepo) {
+		this.langRepo = langRepo;
+	}
+
+	// returns all the languages
+	public List<Language> allLanguages() {
+		return langRepo.findAll();
+	}
+
+    // creates a Language
+    public Language createLanguage(Language lang) {
+        return langRepo.save(lang);
+    }
+    
+    
+    // update a Language
+    public Language updateLanguage(Long id , String name , String creator, double version) {
+    	Language lang = findLanguageById(id);
+    	lang.setName(name);
+    	lang.setCreator(creator);
+    	lang.setVersion(version);
+        return langRepo.save(lang);
+    }
+    
+    // delete a Language
+    public void deleteLanguage(Long id) {
+        langRepo.deleteById(id);
+    }
+    
+    // find a Language
+    public Language findLanguageById(Long id) {
+    	Optional<Language> optionalLang = langRepo.findById(id);
+    	if(optionalLang.isPresent()) {
+    		return optionalLang.get();
+    	} else {
+    		return null;
+    	}
+    }
+}   
+
+
+---------------------------------------------------------
+
+
+//	Create a Song
+	public Lookify createLookify(Lookify lookify) {
+		return lookifyRepository.save(lookify);
+	}
+----------------------------
+//	Find All Songs
+	public List<Lookify> allLookifies() {
+		return lookifyRepository.findAll();
+	}
+----------------------------
+	
+	// find a Song
+    public Lookify findLookifyById(Long id) {
+    	Lookify optionalLookify = lookifyRepository.findById(id).orElse(null);
+
+    		return optionalLookify;
+    }
+----------------------------
+//    Delete a Song
+	public void deleteLookifyById(Long id) {
+		lookifyRepository.deleteById(id);
+	}
+	

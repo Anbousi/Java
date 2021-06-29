@@ -1,0 +1,90 @@
+// ... imports removed for brevity
+@Controller
+public class BooksController {
+    private final BookService bookService;
+    
+    public BooksController(BookService bookService) {
+        this.bookService = bookService;
+    }
+    
+    @RequestMapping("/books")
+    public String index(Model model) {
+        List<Book> books = bookService.allBooks();
+        model.addAttribute("books", books);
+        return "/books/index.jsp";
+    }
+}
+
+
+-------------------------------------------------------
+
+//	Show all Lookifies
+	@RequestMapping(value="/dashboard", method=RequestMethod.GET)
+    public String index(Model model, @ModelAttribute("lookify") Lookify lookify) {
+		List<Lookify> lookifies = lookifyService.allLookifies();
+        model.addAttribute("lookifies", lookifies);
+        return "show.jsp";
+    }
+
+--------------------------------------------------------------------------------------
+	
+//	Home Page
+	@RequestMapping("/")
+	public String home() {
+        return "home.jsp";
+    }
+	
+
+--------------------------------------------------------------------------------------
+
+//	Show all Lookifies
+	@RequestMapping(value="/dashboard", method=RequestMethod.GET)
+    public String index(Model model, @ModelAttribute("lookify") Lookify lookify) {
+		List<Lookify> lookifies = lookifyService.allLookifies();
+        model.addAttribute("lookifies", lookifies);
+        return "show.jsp";
+    }
+	
+--------------------------------------------------------------------------------------
+
+//	New Song Form Page
+	@RequestMapping(value="/songs/new")
+    public String newSong(Model model,@ModelAttribute("lookify") Lookify lookify) {
+		return "new.jsp";
+	}
+
+--------------------------------------------------------------------------------------
+	
+//	Create new song method
+	@RequestMapping(value="/songs/new", method=RequestMethod.POST)
+    public String createSong(Model model,@Valid @ModelAttribute("lookify") Lookify lookify, BindingResult result) {
+		if (result.hasErrors()) {
+            return "new.jsp";
+        } else {
+        	lookifyService.createLookify(lookify);
+            return "redirect:/dashboard";
+        }
+    }
+
+
+--------------------------------------------------------------------------------------
+	
+	
+	@RequestMapping(value="/songs/{id}")
+    public String songInfo(Model model,@PathVariable("id") Long id) {
+		System.out.println("Show info");
+		Lookify lookify = lookifyService.findLookifyById(id);
+        model.addAttribute("lookify", lookify);
+        System.out.println("Show info1");
+        return "info.jsp";
+    }
+	
+
+--------------------------------------------------------------------------------------
+	
+//	Delete Song
+	@RequestMapping(value="/dashboard/delete/{id}")
+    public String deleteSong(@PathVariable("id") Long id) {
+		lookifyService.deleteLookifyById(id);
+        return "redirect:/dashboard";
+    }

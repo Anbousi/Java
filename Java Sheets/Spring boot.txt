@@ -1,0 +1,38 @@
+	<dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+        <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+        </dependency>
+
+----------------------------------------------------
+spring.mvc.view.prefix=/WEB-INF/
+----------------------------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+ <%@ page isErrorPage="true" %>  
+
+
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+
+<c:out value="${error}"/>
+
+----------------------------------------------------------------------------
+
+public class UsersController {
+      @RequestMapping(value="/login", method=RequestMethod.POST)
+      public String login(@RequestParam(value="user") String user, @RequestParam(value="password") String password) {
+            // ... process information and save it to the session
+            return "redirect:/dashboard";
+      }
+
+----------------------------------------------------------------------------
+
+public String index(HttpSession session){
+        session.setAttribute("count", 0);
+        Integer count = (Integer) session.getAttribute("count");
+    }

@@ -1,0 +1,282 @@
+in project add 
+
+web
+JPA
+Devtools
+Mysql
+OR---------OR----------OR
+
+by addding the on pom.XML file
+
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+
+-------------------------------------------------------
+You also need to include spring-boot-starter-validations as of June 2020.
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>   
+
+-------------------------------------------------------
+
+in application.properties file: and change the <<.....>> to ------
+
+spring.datasource.url=jdbc:mysql://localhost:3306/<<YOUR_SCHEMA>>      ------ book-schema //this is the data base name
+spring.datasource.username=<<dbuser>>                                  ------ root
+spring.datasource.password=<<dbpassword>>                              ------ root
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=update
+
+
+spring.mvc.hiddenmethod.filter.enabled=true
+
+
+So--------So--------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+spring.datasource.url=jdbc:mysql://localhost:3306/book-schema
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=update
+
+
+-------------------------------------------------------
+
+Warning---------
+Common error:
+
+java.sql.SQLException: The server time zone value 'PDT' is unrecognized or represents more than one time zone. 
+You must configure either the server or JDBC driver (via the serverTimezone configuration property) 
+to use a more specifc time zone value if you want to utilize time zone support.
+
+Fix by appending timezone information on the end of your mysql url:
+
+spring.datasource.url=jdbc:mysql://localhost:3306/books?serverTimezone=UTC
+
+/Warning---------
+
+Warning---------
+
+Depending on what version you are using you may see a deprecation warning:
+
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+
+You may safely remove this setting from "application.properties" file
+
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+
+/Warning---------
+
+
+-------------------------------------------------------------
+
+>>>create a model class for a book resource. In src/main/java/com/codingdojo/mvc, create a new package called models
+>>> Inside said package, create a new class named Book.
+Since this class must be a Java Bean, it must have private attributes,
+getter and setters in the getField() and setField() formats, 
+and an empty constructor.
+
+
+package com.codingdojo.mvc.models;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+@Entity
+@Table(name="books")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotNull
+    @Size(min = 5, max = 200)
+    private String title;
+    @NotNull
+    @Size(min = 5, max = 200)
+    private String description;
+    @NotNull
+    @Size(min = 3, max = 40)
+    private String language;
+    @NotNull
+    @Min(100)
+    private Integer numberOfPages;
+    // This will not allow the createdAt column to be updated after creation
+    @Column(updatable=false)
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date createdAt;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
+    }
+
+    public Book() {
+    }
+    public Book(String title, String desc, String lang, int pages) {
+        this.title = title;
+        this.description = desc;
+        this.language = lang;
+        this.numberOfPages = pages;
+    }
+    
+    // other getters and setters removed for brevity
+
+}
+
+
+-----------------------------------
+
+Validation Annotations
+
+The annotations do almost exactly what they say:
+
+    @Entity: represents an entity model for our application
+    @Table: sets this as a table in the database
+    @Id: sets this as the primary key
+    @GeneratedValue: sets this as an auto-incrementing value
+    @Size adds validation that the column must be in the specified range
+    @Min adds validation that the column must be at least the specified value
+    @NotNull adds validation that the column must be null
+    @PrePersist runs the method right before the object is created
+    @PreUpdate runs a method when the object is modified
+
+
+------------------------------------------------
+First, we need to create a new package: src/main/java/com/codingdojo/mvc/repositories. 
+Then we need to make our BookRepository interface and extend the CrudRepository:
+
+Crearte a new file inside repositories
+
+src/main/java/com/codingdojo/mvc/repositories/BookRepository.java
+
+// ...
+@Repository
+public interface BookRepository extends CrudRepository<Book, Long>{
+    // this method retrieves all the books from the database
+    List<Book> findAll();
+    // this method finds books with descriptions containing the search string
+    List<Book> findByDescriptionContaining(String search);
+    // this method counts how many titles contain a certain string
+    Long countByTitleContaining(String search);
+    // this method deletes a book that starts with a specific title
+    Long deleteByTitleStartingWith(String search);
+}
+
+
+------------------------------------------------
+
+Search for Query methods
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
+
+------------------------------------------------
+
+
+Create a services package named services of src/main/java/com/codingdojo/mvc. 
+Inisde this package, create a class named BookService. To declare a class to be a service, we use the @Service annotation.
+
+src/main/java/com/codingdojo/mvc/services/BookService.java
+
+// ...
+import org.springframework.stereotype.Service;
+import com.codingdojo.mvc.models.Book;
+@Service
+public class BookService {
+    // adding the book repository as a dependency
+    private final BookRepository bookRepository;
+    
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+    // returns all the books
+    public List<Book> allBooks() {
+        return bookRepository.findAll();
+    }
+    // creates a book
+    public Book createBook(Book b) {
+        return bookRepository.save(b);
+    }
+    // retrieves a book
+    public Book findBook(Long id) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if(optionalBook.isPresent()) {
+            return optionalBook.get();
+        } else {
+            return null;
+        }
+    }
+}
+
+--------------------------------------------------------------
+
+Now that we have domain models, repositories, and services, we can finally create our API to execute basic CRUD operations. 
+Let's create a controller. To test our API, we will be using Postman.
+
+src/main/java/com/codingdojo/mvc/controllers/BooksApi.java
+
+// ..
+import com.codingdojo.mvc.models.Book;
+import com.codingdojo.mvc.services.BookService;
+@RestController
+public class BooksApi {
+    private final BookService bookService;
+    public BooksApi(BookService bookService){
+        this.bookService = bookService;
+    }
+    @RequestMapping("/api/books")
+    public List<Book> index() {
+        return bookService.allBooks();
+    }
+    
+    @RequestMapping(value="/api/books", method=RequestMethod.POST)
+    public Book create(@RequestParam(value="title") String title, @RequestParam(value="description") String desc, @RequestParam(value="language") String lang, @RequestParam(value="pages") Integer numOfPages) {
+        Book book = new Book(title, desc, lang, numOfPages);
+        return bookService.createBook(book);
+    }
+    
+    @RequestMapping("/api/books/{id}")
+    public Book show(@PathVariable("id") Long id) {
+        Book book = bookService.findBook(id);
+        return book;
+    }
+}
+
+-------------------------
+JSP
+
+<%@ page isErrorPage="true" %>
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+--------------------------
+
+
+
+
