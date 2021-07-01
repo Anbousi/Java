@@ -70,3 +70,9 @@ form
         
         <button type="submit">Add a New Language</button>
  </form:form>
+
+----------------------------------------------------------------
+            <c:if test="${Error1 == null}">
+                <p><form:errors path="user.*"/></p>
+                <p><c:out value="${Error}"/></p>
+            </c:if>
