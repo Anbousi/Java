@@ -3,13 +3,10 @@ package com.example.demo.models;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.criteria.Order;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -26,8 +23,8 @@ public class Role {
 	@NotNull
 	@Size(min = 8, message = "Password must be at least 8 characters long")
 	private String password;
-	@OneToMany(mappedBy="user", fetch = FetchType.LAZY)
-	private List<Order> orders;
+	@ManyToMany(mappedBy = "roles")
+	private List<User> users;
 
 	public Role() {
 	}

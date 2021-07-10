@@ -96,7 +96,7 @@ public class CourseControllers {
 		Course c = appServices.findCourseById(courseId);
 		model.addAttribute("course" , c);
 		return "editCourse.jsp";
-		
+	
 	}
 	
 	
